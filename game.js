@@ -1,34 +1,33 @@
-var buttonColours = ["red", "blue", "green", "yellow"];
+var btnCol = ["red", "blue", "green", "yellow"];
+var gamePat = [];
+var clickedPat = [];
 
-var gamePattern = [];
-var userClickedPattern = [];
-
-var started = false;
+var start = false;
 var level = 0;
 
 $(document).keypress(function() {
-  if (!started) {
+  if (!start) {
     $("#level-title").text("Level " + level);
     nextSequence();
-    started = true;
+    start = true;
   }
 });
 
 $(".btn").click(function() {
 
-  var userChosenColour = $(this).attr("id");
-  userClickedPattern.push(userChosenColour);
+  var chosenCol = $(this).attr("id");
+  clickedPat.push(chosenCol);
 
-  playSound(userChosenColour);
-  animatePress(userChosenColour);
+  playSound(chosenCol);
+  animatePress(chosenCol);
 
-  checkAnswer(userClickedPattern.length-1);
+  checkAnswer(clickedPat.length-1);
 });
 
-function checkAnswer(currentLevel) {
+function checkAnswer(currLevel) {
 
-    if (gamePattern[currentLevel] === userClickedPattern[currentLevel]) {
-      if (userClickedPattern.length === gamePattern.length){
+    if (gamePat[currLevel] === clickedPat[currLevel]) {
+      if (clickedPat.length === gamePat.length){
         setTimeout(function () {
           nextSequence();
         }, 1000);
@@ -48,21 +47,21 @@ function checkAnswer(currentLevel) {
 
 
 function nextSequence() {
-  userClickedPattern = [];
+  clickedPat = [];
   level++;
   $("#level-title").text("Level " + level);
-  var randomNumber = Math.floor(Math.random() * 4);
-  var randomChosenColour = buttonColours[randomNumber];
-  gamePattern.push(randomChosenColour);
+  var rndNum = Math.floor(Math.random() * 4);
+  var rndChosenCol = btnCol[rndNum];
+  gamePat.push(rndChosenCol);
 
-  $("#" + randomChosenColour).fadeIn(100).fadeOut(100).fadeIn(100);
-  playSound(randomChosenColour);
+  $("#" + rndChosenCol).fadeIn(100).fadeOut(100).fadeIn(100);
+  playSound(rndChosenCol);
 }
 
-function animatePress(currentColor) {
-  $("#" + currentColor).addClass("pressed");
+function animatePress(currCol) {
+  $("#" + currCol).addClass("pressed");
   setTimeout(function () {
-    $("#" + currentColor).removeClass("pressed");
+    $("#" + currCol).removeClass("pressed");
   }, 100);
 }
 
@@ -73,6 +72,6 @@ function playSound(name) {
 
 function startOver() {
   level = 0;
-  gamePattern = [];
-  started = false;
+  gamePat = [];
+  start = false;
 }
